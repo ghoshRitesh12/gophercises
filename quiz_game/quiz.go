@@ -43,13 +43,13 @@ func main() {
 	}
 
 	if partNo == 1 {
-		RunQuizPart1(*scanner, &positivePoints, &negativePoints)
+		RunQuiz(*scanner, &positivePoints, &negativePoints)
 		printScore(TOTAL_PROBLEMS, positivePoints, negativePoints)
 
 	} else if partNo == 2 {
-		waitingSeconds := 10
+		waitingSeconds := 15
 		timer := time.NewTimer(time.Second * time.Duration(waitingSeconds))
-		go RunQuizPart2(*scanner, &positivePoints, &negativePoints)
+		go RunQuiz(*scanner, &positivePoints, &negativePoints)
 		<-timer.C
 		printScore(TOTAL_PROBLEMS, positivePoints, negativePoints)
 	} else {
@@ -58,34 +58,7 @@ func main() {
 	}
 }
 
-func RunQuizPart1(scanner bufio.Scanner, positivePoints, negativePoints *uint8) {
-	var problem string
-	var givenAnswer uint8
-
-	for scanner.Scan() {
-		fmt.Sscanf(scanner.Text(), "%s", &problem)
-
-		splitProblem := strings.Split(problem, ",")
-		question := splitProblem[0]
-		actualAnswer, err := strconv.Atoi(splitProblem[1])
-
-		if err != nil {
-			*negativePoints++
-			continue
-		}
-
-		fmt.Printf("What does %s evaluate to?: ", question)
-		fmt.Scanln(&givenAnswer)
-
-		if uint8(actualAnswer) == givenAnswer {
-			*positivePoints++
-		} else {
-			*negativePoints++
-		}
-	}
-}
-
-func RunQuizPart2(scanner bufio.Scanner, positivePoints, negativePoints *uint8) {
+func RunQuiz(scanner bufio.Scanner, positivePoints, negativePoints *uint8) {
 	var problem string
 	var givenAnswer uint8
 
@@ -114,5 +87,5 @@ func RunQuizPart2(scanner bufio.Scanner, positivePoints, negativePoints *uint8) 
 
 func printScore(totalPoints, positivePoints, negativePoints uint8) {
 	fmt.Println("\n\nTIME UPP :)")
-	fmt.Printf("There were %d total questions, you got %d right and %d wrong answer(s).\n", totalPoints, positivePoints, negativePoints)
+	fmt.Printf("There were %d questions, you got %d right and %d wrong answer(s).\n", totalPoints, positivePoints, negativePoints)
 }
